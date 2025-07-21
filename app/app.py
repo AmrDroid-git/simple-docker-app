@@ -1,11 +1,18 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+import time
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////app/db/people.db'
+
+# Wait a bit for MySQL to be ready (can also use healthchecks)
+time.sleep(10)
+
+# MySQL DB config (using environment variables is also possible)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:rootpassword@db:3306/flaskdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# Model
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -13,9 +20,11 @@ class Person(db.Model):
     hobby = db.Column(db.String(100))
     address = db.Column(db.String(200))
 
+# Create the table
 with app.app_context():
     db.create_all()
 
+# Routes
 @app.route('/')
 def index():
     return render_template('index.html')

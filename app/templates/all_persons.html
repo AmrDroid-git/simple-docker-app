@@ -1,32 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>All Submitted Persons</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+<html>
+<head><title>All Persons</title></head>
 <body>
-    <div class="result-container">
-        <h2>All Submitted Persons</h2>
-        {% if persons %}
-            <ul class="result-list">
-                {% for person in persons %}
-                    <li>
-                        <strong>Name:</strong> {{ person.name }} |
-                        <strong>Age:</strong> {{ person.age }} |
-                        <strong>Hobby:</strong> {{ person.hobby }} |
-                        <strong>Address:</strong> {{ person.address }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No data yet.</p>
-        {% endif %}
-
-        <div class="button-container">
-            <a href="{{ url_for('index') }}" class="secondary-btn">Go Back</a>
-        </div>
-
-    </div>
+  <h2>All Persons</h2>
+  <ul>
+    {% for person in persons %}
+      <li>{{ person.name }} - {{ person.age }} - {{ person.hobby }} - {{ person.address }}</li>
+    {% endfor %}
+  </ul>
+  <a href="/">Back</a>
 </body>
 </html>
