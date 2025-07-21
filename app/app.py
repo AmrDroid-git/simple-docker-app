@@ -4,7 +4,6 @@ import time
 
 app = Flask(__name__)
 
-# Wait a bit for MySQL to be ready (can also use healthchecks)
 time.sleep(10)
 
 # MySQL DB config (using environment variables is also possible)
