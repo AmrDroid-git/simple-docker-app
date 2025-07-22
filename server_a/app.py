@@ -4,14 +4,17 @@ import time
 
 app = Flask(__name__)
 
+# Wait to ensure MySQL is ready
 time.sleep(10)
 
-# MySQL DB config (using environment variables is also possible)
+# MySQL database config: service name "db" from docker-compose
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:rootpassword@db:3306/flaskdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize DB
 db = SQLAlchemy(app)
 
-# Model
+# Define the Person model
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -19,15 +22,16 @@ class Person(db.Model):
     hobby = db.Column(db.String(100))
     address = db.Column(db.String(200))
 
-# Create the table
+# Create table
 with app.app_context():
     db.create_all()
 
-# Routes
+# Route: show form
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# Route: receive form submission (from local or external)
 @app.route('/submit', methods=['POST'])
 def submit():
     try:
@@ -43,6 +47,7 @@ def submit():
     except Exception as e:
         return f"Error submitting data: {e}", 500
 
+# Route: list all stored persons
 @app.route('/all_persons')
 def all_persons():
     persons = Person.query.all()
