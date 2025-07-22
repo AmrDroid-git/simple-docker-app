@@ -1,11 +1,18 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import time
+import pymysql
 
 app = Flask(__name__)
 
-# Wait to ensure MySQL is ready
-time.sleep(10)
+while True:
+    try:
+        conn = pymysql.connect(host="db", user="root", password="rootpassword")
+        conn.close()
+        break
+    except:
+        print("Waiting for MySQL...")
+        time.sleep(1)
 
 # MySQL database config: service name "db" from docker-compose
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:rootpassword@db:3306/flaskdb'
